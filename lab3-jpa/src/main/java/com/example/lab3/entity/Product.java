@@ -2,6 +2,8 @@ package com.example.lab3.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 @Entity
 @Table(name = "products")
@@ -18,5 +20,6 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
+    @JsonBackReference
     private Category category;
 }

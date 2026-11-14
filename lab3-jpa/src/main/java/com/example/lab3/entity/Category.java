@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "categories")
@@ -18,5 +19,6 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Product> products = new ArrayList<>();
 }
