@@ -7,6 +7,9 @@ import com.example.lab3.repository.CategoryRepository;
 import com.example.lab3.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +43,20 @@ public class ProductService {
             result.add(new ProductDto(p.getId(), p.getName(), p.getPrice(), categoryId));
         }
         return result;
+    }
+
+    @Transactional
+    public Page<ProductDto> findAll(Pageable pageable) {
+        Page<Product> page = productRepo.findAll(pageable);
+        List<ProductDto> result = new ArrayList<>();
+        for (Product p : page.getContent()) {
+            Long categoryId = null;
+            if (p.getCategory() != null) {
+                categoryId = p.getCategory().getId();
+            }
+            result.add(new ProductDto(p.getId(), p.getName(), p.getPrice(), categoryId));
+        }
+        return new PageImpl<>(result, pageable, page.getTotalElements());
     }
 
     @Transactional

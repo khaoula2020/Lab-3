@@ -4,6 +4,10 @@ import com.example.lab3.dto.ProductDto;
 import com.example.lab3.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +22,13 @@ public class ProductController {
     public ResponseEntity<ProductDto> create(@Valid @RequestBody ProductDto dto) {
         ProductDto created = productService.create(dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public Page<ProductDto> list(@RequestParam int page, @RequestParam int size,
+                                 @RequestParam String sort) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+        return productService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
@@ -36,4 +47,3 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 }
-
