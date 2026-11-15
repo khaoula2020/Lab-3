@@ -19,7 +19,6 @@ public class ProductService {
     private final ProductRepository productRepo;
     private final CategoryRepository categoryRepo;
 
-
     @Transactional
     public ProductDto create(ProductDto dto) {
         Category cat = categoryRepo.findById(dto.categoryId())
@@ -28,7 +27,6 @@ public class ProductService {
         Product saved = productRepo.save(p);
         return new ProductDto(saved.getId(), saved.getName(), saved.getPrice(), cat.getId());
     }
-
 
     @Transactional
     public List<ProductDto> findAll() {
@@ -44,9 +42,8 @@ public class ProductService {
         return result;
     }
 
-
     @Transactional
-    public ProductDto findById(Long id) {
+    public ProductDto getById(Long id) {
         Product p = productRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
         Long categoryId = null;
@@ -55,7 +52,6 @@ public class ProductService {
         }
         return new ProductDto(p.getId(), p.getName(), p.getPrice(), categoryId);
     }
-
 
     @Transactional
     public ProductDto update(Long id, ProductDto dto) {
@@ -69,7 +65,6 @@ public class ProductService {
         Product saved = productRepo.save(p);
         return new ProductDto(saved.getId(), saved.getName(), saved.getPrice(), cat.getId());
     }
-
 
     @Transactional
     public void delete(Long id) {
